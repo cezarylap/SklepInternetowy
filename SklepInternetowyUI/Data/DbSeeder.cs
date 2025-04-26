@@ -37,7 +37,6 @@ public class DbSeeder
             }
 
             // create admin user
-
             var admin = new IdentityUser
             {
                 UserName = "admin@gmail.com",
@@ -51,7 +50,6 @@ public class DbSeeder
                 await userMgr.CreateAsync(admin, "Admin@123");
                 await userMgr.AddToRoleAsync(admin, Roles.Admin.ToString());
             }
-
 
             if (!context.Genres.Any())
             {
@@ -104,12 +102,11 @@ public class DbSeeder
     {
         var orderStatuses = new[]
         {
-            new OrderStatus { StatusId = 1, StatusName = "Pending" },
-            new OrderStatus { StatusId = 2, StatusName = "Shipped" },
-            new OrderStatus { StatusId = 3, StatusName = "Delivered" },
-            new OrderStatus { StatusId = 4, StatusName = "Cancelled" },
-            new OrderStatus { StatusId = 5, StatusName = "Returned" },
-            new OrderStatus { StatusId = 6, StatusName = "Refund" }
+            new OrderStatus { StatusId = 1, StatusName = "W realizacji" },
+            new OrderStatus { StatusId = 2, StatusName = "Wysłane" },
+            new OrderStatus { StatusId = 3, StatusName = "Dostarczone" },
+            new OrderStatus { StatusId = 4, StatusName = "Anulowane" },
+            new OrderStatus { StatusId = 5, StatusName = "Zwrócone" },
         };
 
         await context.orderStatuses.AddRangeAsync(orderStatuses);
@@ -120,25 +117,18 @@ public class DbSeeder
     {
         var Products = new List<Product>
         {
-            // Konsole Products (GenreId = 1)
             new Product { ProductName = "Sony PlayStation 5", AuthorName = "Sony", Price = 2100, GenreId = 1 },
             new Product { ProductName = "Sony PlayStation 5 DualSense", AuthorName = "Sony", Price = 319, GenreId = 1 },
-            
-            // Komputery Products (GenreId = 2)
             new Product { ProductName = "Monitor Predator XB273UV3bmiiprzx 27", AuthorName = "Sony", Price = 1449, GenreId = 2 },
             new Product { ProductName = "Dysk Samsung 980 500GB M2", AuthorName = "Samsung", Price = 199, GenreId = 2 },
             new Product { ProductName = "Pamięć RAM GOODRAM IRDM 32GB 6000MHz", AuthorName = "GOODRAM", Price = 417, GenreId = 2 },
             new Product { ProductName = "Procesor INTEL Core Ultra 9-285K", AuthorName = "Intel", Price = 2939, GenreId = 2 },
-            
-            // Foto i kamery Products (GenreId = 3)
             new Product { ProductName = "Aparat bezlusterkowy SONY Alpha A7 III", AuthorName = "Sony", Price = 6489, GenreId = 3 },
             new Product { ProductName = "Aparat bezlusterkowy CANON EOS R8", AuthorName = "Canon", Price = 5849, GenreId = 3 },
             new Product { ProductName = "Gimbal DJI Osmo Mobile 7P Czarny", AuthorName = "DJI", Price = 698, GenreId = 3 },
         };
-
         await context.Products.AddRangeAsync(Products);
         await context.SaveChangesAsync();
     }
-
     #endregion
 }
