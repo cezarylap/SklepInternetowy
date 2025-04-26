@@ -148,7 +148,7 @@ namespace ProductSklepInternetowyUI.Repositories
                                     .Where(a => a.ShoppingCartId == cart.Id).ToList();
                 if (cartDetail.Count == 0)
                     throw new InvalidOperationException("Cart is empty");
-                var pendingRecord = _db.orderStatuses.FirstOrDefault(s => s.StatusName == "Pending");
+                var pendingRecord = _db.orderStatuses.FirstOrDefault(s => s.StatusName == "W realizacji");
                 if (pendingRecord is null)
                     throw new InvalidOperationException("Order status does not have Pending status");
                 var order = new Order
