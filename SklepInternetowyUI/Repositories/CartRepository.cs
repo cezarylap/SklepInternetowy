@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ProductSklepInternetowyUI.Repositories
 {
@@ -49,7 +52,7 @@ namespace ProductSklepInternetowyUI.Repositories
                         ProductId = ProductId,
                         ShoppingCartId = cart.Id,
                         Quantity = qty,
-                        UnitPrice = Product.Price  // it is a new line after update
+                        UnitPrice = Product.Price 
                     };
                     _db.CartDetails.Add(cartItem);
                 }
@@ -129,6 +132,10 @@ namespace ProductSklepInternetowyUI.Repositories
                               select new { cartDetail.Id }
                         ).ToListAsync();
             return data.Count;
+        }
+        public double CalculateTotal(List<CartDetail> items)
+        {
+            return items.Sum(item => item.Product.Price * item.Quantity);
         }
 
         public async Task<bool> DoCheckout(CheckoutModel model)
