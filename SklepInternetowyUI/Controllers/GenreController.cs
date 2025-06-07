@@ -13,19 +13,19 @@ namespace ProductSklepInternetowyUI.Controllers
             _genreRepo = genreRepo;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() //Lista wszystkich kategorii.
         {
             var genres = await _genreRepo.GetGenres();
             return View(genres);
         }
 
-        public IActionResult AddGenre()
+        public IActionResult AddGenre() //Formularz dodawania nowej kategorii.
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGenre(GenreDTO genre)
+        public async Task<IActionResult> AddGenre(GenreDTO genre) //Obsługuje zapis nowej kategorii.
         {
             if(!ModelState.IsValid)
             {
@@ -46,7 +46,7 @@ namespace ProductSklepInternetowyUI.Controllers
 
         }
 
-        public async Task<IActionResult> UpdateGenre(int id)
+        public async Task<IActionResult> UpdateGenre(int id) //Pobiera dane kategorii do edycji.
         {
             var genre = await _genreRepo.GetGenreById(id);
             if (genre is null)
@@ -60,7 +60,7 @@ namespace ProductSklepInternetowyUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateGenre(GenreDTO genreToUpdate)
+        public async Task<IActionResult> UpdateGenre(GenreDTO genreToUpdate) //Zapisuje zmiany kategorii.
         {
             if (!ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace ProductSklepInternetowyUI.Controllers
 
         }
 
-        public async Task<IActionResult> DeleteGenre(int id)
+        public async Task<IActionResult> DeleteGenre(int id) //Usuwa kategorię.
         {
             var genre = await _genreRepo.GetGenreById(id);
             if (genre is null)

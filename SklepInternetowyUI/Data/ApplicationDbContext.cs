@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProductSklepInternetowyUI.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext //klasa dziedziczy po IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

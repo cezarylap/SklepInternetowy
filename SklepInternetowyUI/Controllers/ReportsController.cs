@@ -8,13 +8,11 @@ public class ReportsController : Controller
     {
         _reportRepository = reportRepository;
     }
-    // GET: ReportsController
-    public async Task<ActionResult> TopFiveSellingProducts(DateTime? sDate = null, DateTime? eDate = null)
+    public async Task<ActionResult> TopFiveSellingProducts(DateTime? sDate = null, DateTime? eDate = null) //Zwraca dane na temat najczêœciej kupowanych produktów w wybranym przedziale dat.
     {
         try
         {
-            // by default, get last 7 days record
-            DateTime startDate = sDate ?? DateTime.UtcNow.AddDays(-7);
+            DateTime startDate = sDate ?? DateTime.UtcNow.AddDays(-7);   // Z ostatnich 7 dni
             DateTime endDate = eDate ?? DateTime.UtcNow;
             var topFiveSellingProducts = await _reportRepository.GetTopNSellingProductsByDate(startDate, endDate);
             var vm = new TopNSoldProductsVm(startDate, endDate, topFiveSellingProducts);

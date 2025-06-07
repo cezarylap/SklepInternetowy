@@ -19,13 +19,13 @@ public class ProductController : Controller
         _fileService = fileService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index() //Lista produktów.
     {
         var Products = await _ProductRepo.GetProducts();
         return View(Products);
     }
 
-    public async Task<IActionResult> AddProduct()
+    public async Task<IActionResult> AddProduct() //Formularz dodawania nowego produktu.
     {
         var genreSelectList = (await _genreRepo.GetGenres()).Select(genre => new SelectListItem
         {
@@ -37,7 +37,7 @@ public class ProductController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddProduct(ProductDTO ProductToAdd)
+    public async Task<IActionResult> AddProduct(ProductDTO ProductToAdd) //Obsługuje zapis nowego produktu.
     {
         var genreSelectList = (await _genreRepo.GetGenres()).Select(genre => new SelectListItem
         {
@@ -46,22 +46,22 @@ public class ProductController : Controller
         });
         ProductToAdd.GenreList = genreSelectList;
 
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid) //1 Sprawdza czy model jest poprawny
             return View(ProductToAdd);
 
         try
         {
             if (ProductToAdd.ImageFile != null)
             {
-                if(ProductToAdd.ImageFile.Length> 1 * 1024 * 1024)
+                if(ProductToAdd.ImageFile.Length> 1 * 1024 * 1024) //2 waliduje plik graficzny (rozszerzenie i rozmiar do 1 MB).
                 {
                     throw new InvalidOperationException("Image file can not exceed 1 MB");
                 }
                 string[] allowedExtensions = [".jpeg",".jpg",".png"];
-                string imageName=await _fileService.SaveFile(ProductToAdd.ImageFile, allowedExtensions);
+                string imageName=await _fileService.SaveFile(ProductToAdd.ImageFile, allowedExtensions); //3 o	Zapisuje plik przez IFileService.
                 ProductToAdd.Image = imageName;
             }
-            // manual mapping of ProductDTO -> Product
+            //4 mapuje dane z DTO (ProductDTO) na encję Product.
             Product Product = new()
             {
                 Id = ProductToAdd.Id,
@@ -72,8 +72,9 @@ public class ProductController : Controller
                 Price = ProductToAdd.Price
             };
             await _ProductRepo.AddProduct(Product);
-            TempData["successMessage"] = "Product is added successfully";
-            return RedirectToAction(nameof(AddProduct));
+            //5	Wywołuje repozytorium do zapisania produktu w bazie danych.
+            TempData["successMessage"] = "Product is added successfully"; //6 w przypadku sukcesu pokazuje komunikat
+            return RedirectToAction(nameof(AddProduct)); // 7 Przekierowanie do formularza
         }
         catch (InvalidOperationException ex)
         {
@@ -92,7 +93,7 @@ public class ProductController : Controller
         }
     }
 
-    public async Task<IActionResult> UpdateProduct(int id)
+    public async Task<IActionResult> UpdateProduct(int id) //Formularz edycji produktu.
     {
         var Product = await _ProductRepo.GetProductById(id);
         if(Product==null)
@@ -119,7 +120,7 @@ public class ProductController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateProduct(ProductDTO ProductToUpdate)
+    public async Task<IActionResult> UpdateProduct(ProductDTO ProductToUpdate) //Zapisuje zmiany produktu.
     {
         var genreSelectList = (await _genreRepo.GetGenres()).Select(genre => new SelectListItem
         {
@@ -183,7 +184,7 @@ public class ProductController : Controller
         }
     }
 
-    public async Task<IActionResult> DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProduct(int id) //Usuwa produkt.
     {
         try
         {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProductSklepInternetowyUI.Controllers
 {
-    [Authorize]
+    [Authorize] //tylko zalogowaniu użytkownicy
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepo;
@@ -12,7 +12,7 @@ namespace ProductSklepInternetowyUI.Controllers
         {
             _cartRepo = cartRepo;
         }
-        public async Task<IActionResult> AddItem(int ProductId, int qty = 1, int redirect = 0)
+        public async Task<IActionResult> AddItem(int ProductId, int qty = 1, int redirect = 0) //Dodaje produkt do koszyka.
         {
             var cartCount = await _cartRepo.AddItem(ProductId, qty);
             if (redirect == 0)
@@ -20,24 +20,24 @@ namespace ProductSklepInternetowyUI.Controllers
             return RedirectToAction("GetUserCart");
         }
 
-        public async Task<IActionResult> RemoveItem(int ProductId)
+        public async Task<IActionResult> RemoveItem(int ProductId) //Usuwa produkt z koszyka.
         {
             var cartCount = await _cartRepo.RemoveItem(ProductId);
             return RedirectToAction("GetUserCart");
         }
-        public async Task<IActionResult> GetUserCart()
+        public async Task<IActionResult> GetUserCart() //Zwraca zawartość koszyka użytkownika.
         {
             var cart = await _cartRepo.GetUserCart();
             return View(cart);
         }
 
-        public  async Task<IActionResult> GetTotalItemInCart()
+        public  async Task<IActionResult> GetTotalItemInCart() // liczbę przedmiotów w koszyku.
         {
             int cartItem = await _cartRepo.GetCartItemCount();
             return Ok(cartItem);
         }
 
-        public  IActionResult Checkout()
+        public  IActionResult Checkout() //Obsługuje proces składania zamówienia.
         {
             return View();
         }
@@ -53,12 +53,12 @@ namespace ProductSklepInternetowyUI.Controllers
             return RedirectToAction(nameof(OrderSuccess));
         }
 
-        public IActionResult OrderSuccess()
+        public IActionResult OrderSuccess() //Widok sukcesu składania zamówienia
         {
             return View();
         }
 
-        public IActionResult OrderFailure()
+        public IActionResult OrderFailure() //Widok błędu składania zamówienia
         {
             return View();
         }

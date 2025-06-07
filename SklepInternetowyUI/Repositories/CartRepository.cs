@@ -37,7 +37,7 @@ namespace ProductSklepInternetowyUI.Repositories
                     _db.ShoppingCarts.Add(cart);
                 }
                 _db.SaveChanges();
-                // cart detail section
+                // Elementy koszyka
                 var cartItem = _db.CartDetails
                                   .FirstOrDefault(a => a.ShoppingCartId == cart.Id && a.ProductId == ProductId);
                 if (cartItem is not null)
@@ -65,7 +65,6 @@ namespace ProductSklepInternetowyUI.Repositories
             var cartItemCount = await GetCartItemCount(userId);
             return cartItemCount;
         }
-
 
         public async Task<int> RemoveItem(int ProductId)
         {
@@ -121,14 +120,14 @@ namespace ProductSklepInternetowyUI.Repositories
 
         public async Task<int> GetCartItemCount(string userId = "")
         {
-            if (string.IsNullOrEmpty(userId)) // updated line
+            if (string.IsNullOrEmpty(userId))
             {
                 userId = GetUserId();
             }
             var data = await (from cart in _db.ShoppingCarts
                               join cartDetail in _db.CartDetails
                               on cart.Id equals cartDetail.ShoppingCartId
-                              where cart.UserId==userId // updated line
+                              where cart.UserId==userId
                               select new { cartDetail.Id }
                         ).ToListAsync();
             return data.Count;
@@ -143,8 +142,7 @@ namespace ProductSklepInternetowyUI.Repositories
             using var transaction = _db.Database.BeginTransaction();
             try
             {
-                // logic
-                // move data from cartDetail to order and order detail then we will remove cart detail
+                // przenieś dane z cartDetail do zamówienia i szczegółów zamówienia, a następnie usun szczegóły koszyka
                 var userId = GetUserId();
                 if (string.IsNullOrEmpty(userId))
                     throw new UnauthorizedAccessException("User is not logged-in");

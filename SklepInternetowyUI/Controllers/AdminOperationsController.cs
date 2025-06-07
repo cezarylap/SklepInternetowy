@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProductSklepInternetowyUI.Controllers;
 
-[Authorize(Roles = nameof(Roles.Admin))]
+[Authorize(Roles = nameof(Roles.Admin))] //dostep tylko dla administratorów
 public class AdminOperationsController : Controller
 {
     private readonly IUserOrderRepository _userOrderRepository;
@@ -14,13 +14,13 @@ public class AdminOperationsController : Controller
         _userOrderRepository = userOrderRepository;
     }
 
-    public async Task<IActionResult> AllOrders()
+    public async Task<IActionResult> AllOrders() //Pobiera wszystkie zamówienia (w tym również zrealizowane) i przekazuje je do widoku.
     {
         var orders = await _userOrderRepository.UserOrders(true);
         return View(orders);
     }
 
-    public async Task<IActionResult> TogglePaymentStatus(int orderId)
+    public async Task<IActionResult> TogglePaymentStatus(int orderId) //Zmienia status opłacenia zamówienia.
     {
         try
         {
@@ -28,12 +28,12 @@ public class AdminOperationsController : Controller
         }
         catch (Exception ex)
         {
-            // log exception here
+            // możliwy wyjątek
         }
         return RedirectToAction(nameof(AllOrders));
     }
 
-    public async Task<IActionResult> UpdateOrderStatus(int orderId)
+    public async Task<IActionResult> UpdateOrderStatus(int orderId) //Przygotowuje formularz do zmiany statusu zamówienia
     {
         var order = await _userOrderRepository.GetOrderById(orderId);
         if (order == null)
@@ -54,7 +54,7 @@ public class AdminOperationsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateOrderStatus(UpdateOrderStatusModel data)
+    public async Task<IActionResult> UpdateOrderStatus(UpdateOrderStatusModel data) //Obsługuje zapis zmian statusu zamówienia.
     {
         try
         {
@@ -72,14 +72,14 @@ public class AdminOperationsController : Controller
         }
         catch (Exception ex)
         {
-            // catch exception here
+            // możliwy wyjątek
             TempData["msg"] = "Something went wrong";
         }
         return RedirectToAction(nameof(UpdateOrderStatus), new { orderId = data.OrderId });
     }
 
 
-    public IActionResult Dashboard()
+    public IActionResult Dashboard() //widok pulpitu administratora.
     {
         return View();
     }

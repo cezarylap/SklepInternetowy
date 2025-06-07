@@ -11,8 +11,7 @@ public class DbSeeder
         {
             var context = service.GetService<ApplicationDbContext>();
 
-            // this block will check if there are any pending migrations and apply them
-            if ((await context.Database.GetPendingMigrationsAsync()).Count() > 0)
+            if ((await context.Database.GetPendingMigrationsAsync()).Count() > 0) //Sprawdza, czy są jakieś niezaaplikowane migracje, jeśli tak to aktualizuje baze danych
             {
                 await context.Database.MigrateAsync();
             }
@@ -20,7 +19,7 @@ public class DbSeeder
             var userMgr = service.GetService<UserManager<IdentityUser>>();
             var roleMgr = service.GetService<RoleManager<IdentityRole>>();
 
-            // create admin role if not exists
+            //Tworzy role: Admin i User, jeśli ich nie ma
             var adminRoleExists = await roleMgr.RoleExistsAsync(Roles.Admin.ToString());
 
             if (!adminRoleExists)
@@ -36,7 +35,7 @@ public class DbSeeder
                 await roleMgr.CreateAsync(new IdentityRole(Roles.User.ToString()));
             }
 
-            // create admin user
+            // Tworzenie administratora
             var admin = new IdentityUser
             {
                 UserName = "admin@gmail.com",
@@ -59,7 +58,7 @@ public class DbSeeder
             if (!context.Products.Any())
             {
                 await SeedProductsAsync(context);
-                // update stock table
+                // Dodaje przykładowe dane
                 await context.Database.ExecuteSqlRawAsync(@"
                      INSERT INTO Stock(ProductId,Quantity) 
                      SELECT 

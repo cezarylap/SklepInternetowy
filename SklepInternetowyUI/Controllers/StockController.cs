@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProductSklepInternetowyUI.Controllers
 {
-    [Authorize(Roles=nameof(Roles.Admin))]
+    [Authorize(Roles=nameof(Roles.Admin))] //Tylko admin
     public class StockController : Controller
     {
         private readonly IStockRepository _stockRepo;
@@ -13,13 +13,13 @@ namespace ProductSklepInternetowyUI.Controllers
             _stockRepo = stockRepo;
         }
 
-        public async Task<IActionResult> Index(string sTerm="")
+        public async Task<IActionResult> Index(string sTerm="") //Lista produktów ze stanem magazynowym, z możliwością wyszukiwania.
         {
             var stocks=await _stockRepo.GetStocks(sTerm);
             return View(stocks);
         }
 
-        public async Task<IActionResult> ManangeStock(int ProductId)
+        public async Task<IActionResult> ManangeStock(int ProductId) //Formularz zmiany stanu magazynowego.
         {
             var existingStock = await _stockRepo.GetStockByProductId(ProductId);
             var stock = new StockDTO
@@ -32,7 +32,7 @@ namespace ProductSklepInternetowyUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManangeStock(StockDTO stock)
+        public async Task<IActionResult> ManangeStock(StockDTO stock) //Zapisuje zmiany stanu.
         {
             if (!ModelState.IsValid)
                 return View(stock);

@@ -15,8 +15,7 @@ namespace ProductSklepInternetowyUI.Repositories
 
         public async Task ManageStock(StockDTO stockToManage)
         {
-            // if there is no stock for given Product id, then add new record
-            // if there is already stock for given Product id, update stock's quantity
+            // jeżeli w magazynie niema produktu wtedy go dodaj, jeżeli w magazynie jest produkt to zmień ilość
             var existingStock = await GetStockByProductId(stockToManage.ProductId);
             if (existingStock is null)
             {

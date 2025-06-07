@@ -8,6 +8,6 @@ namespace ProductSklepInternetowyUI.Models.DTOs
 
         [Required]
         [MaxLength(40)]
-        public string GenreName { get; set; }
+        public string? GenreName { get; set; }
     }
 }

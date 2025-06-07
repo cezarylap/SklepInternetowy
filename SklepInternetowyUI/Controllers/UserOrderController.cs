@@ -12,7 +12,7 @@ namespace ProductSklepInternetowyUI.Controllers
         {
             _userOrderRepo = userOrderRepo;
         }
-        public async Task<IActionResult> UserOrders()
+        public async Task<IActionResult> UserOrders() //Zwraca listę zamówień danego użytkownika (zalogowanego).
         {
             var orders = await _userOrderRepo.UserOrders();
             return View(orders);

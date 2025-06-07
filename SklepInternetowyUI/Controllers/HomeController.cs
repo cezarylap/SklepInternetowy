@@ -18,7 +18,7 @@ namespace ProductSklepInternetowyUI.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index(string sterm="",int genreId=0)
+        public async Task<IActionResult> Index(string sterm="",int genreId=0) //Zwraca listę produktów według wyszukiwanej frazy i wybranej kategorii.
         {
             IEnumerable<Product> Products = await _homeRepository.GetProducts(sterm, genreId);
             IEnumerable<Genre> genres = await _homeRepository.Genres();
@@ -32,13 +32,8 @@ namespace ProductSklepInternetowyUI.Controllers
             return View(ProductModel);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error() //Widok błędu.
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProductSklepInternetowyUI.Repositories;
 
-[Authorize(Roles = nameof(Roles.Admin))]
+[Authorize(Roles = nameof(Roles.Admin))] //dostepne dla admina
 public class ReportRepository : IReportRepository
 {
     private readonly ApplicationDbContext _context;
@@ -13,7 +13,7 @@ public class ReportRepository : IReportRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<TopNSoldProductModel>> GetTopNSellingProductsByDate(DateTime startDate, DateTime endDate)
+    public async Task<IEnumerable<TopNSoldProductModel>> GetTopNSellingProductsByDate(DateTime startDate, DateTime endDate) //Zwraca listê produktów, które sprzeda³y siê najlepiej w podanym przedziale dat.
     {
         var startDateParam = new SqlParameter("@startDate", startDate);
         var endDateParam = new SqlParameter("@endDate", endDate);
